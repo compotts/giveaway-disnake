@@ -11,7 +11,6 @@ class PoolCreate(commands.Cog):
     async def on_ready(self):
         if await db_pool.is_closed():
             await db_pool.create_pool()
-            print("Pool created")
 
     @commands.Cog.listener()
     async def on_disconnect(self):
@@ -19,9 +18,8 @@ class PoolCreate(commands.Cog):
         # if not await db_pool.is_closed():
         #     await db_pool.close_pool()
         #     print("Pool closed")
-    
+
     @commands.Cog.listener()
     async def on_resumed(self):
         if await db_pool.is_closed():
             await db_pool.create_pool()
-            print("Pool created")

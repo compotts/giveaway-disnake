@@ -4,6 +4,8 @@ from cogs.giveaway_create import Giveaway
 from database import TablesCreate
 from database import PoolCreate
 
+from loguru import logger
+
 cogs = (
     Giveaway,
     PoolCreate,
@@ -15,4 +17,4 @@ cogs = (
 def setup(bot):
     for cog in cogs:
         bot.add_cog(cog(bot))
-    print("Cogs loaded")
+        logger.info(f'Cog {cog.name} loaded')

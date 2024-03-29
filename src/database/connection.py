@@ -4,7 +4,7 @@ from loguru import logger as log
 from tools.converters import Url
 from schemas.database.database_models import ConvertedUrl
 
-import configs.config as Config
+from config import DATABASE_URL
 
 
 class DatabasePool:
@@ -112,4 +112,4 @@ class DatabasePool:
             log.error(f"Ошибка выполнения запроса {query}: {e}")
             return None
 
-db_pool = DatabasePool(Url.convert(str(Config.DATABASE_URL)))
+db_pool = DatabasePool(Url.convert(str(DATABASE_URL)))

@@ -10,6 +10,9 @@ from cogs._entriesPaginator import EntriesPaginator
 
 from database.database import Database
 
+from loguru import logger
+
+
 
 class GiveawayListeners(commands.Cog):
     def __init__(self, bot):
@@ -21,10 +24,10 @@ class GiveawayListeners(commands.Cog):
         await asyncio.sleep(2)
         if not GiveawayTasks.update_footer.is_running():
             GiveawayTasks.update_footer.start(self)
-            print("Update footer loop started")
+            logger.info("Update footer loop started")
         if not GiveawayTasks.update_giveaways.is_running():
             GiveawayTasks.update_giveaways.start(self)
-            print("Update giveaways loop started")
+            logger.info("Update giveaways loop started")
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: disnake.Member, before: disnake.VoiceState, after: disnake.VoiceState):

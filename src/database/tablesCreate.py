@@ -13,4 +13,3 @@ class TablesCreate(commands.Cog):
     async def on_ready(self):
         await asyncio.sleep(1)
         await self.db.create_tables()
-        print("Tables created")
