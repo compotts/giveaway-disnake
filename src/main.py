@@ -2,8 +2,12 @@ import disnake
 from disnake.ext import commands
 from loguru import logger
 
-from cogs import setup
+# from cogs import setup
 from config import TOKEN, TEST_GUILD
+from db import metadata, db_setup, database
+
+
+db_setup(metadata)
 
 
 class Bot(commands.Bot):
@@ -18,6 +22,11 @@ class Bot(commands.Bot):
         )
 
     async def on_ready(self):
+        if not database.is_connected:
+            await database.connect()
+
+        logger.info("Database connected properly")
+
         logger.success(
             f"-> < DISCORD API  CONNECTED > {self.user.name} запущен")
 
@@ -25,12 +34,15 @@ class Bot(commands.Bot):
         logger.warning(f"-> < DISCORD API RESUMED > {self.user}")
 
     async def on_disconnect(self):
+        if database.is_connected:
+            await database.disconnect()
+
         logger.critical(f"-> < DISCORD API DISCONNECTED > {self.user}")
 
 
 bot = Bot()
 
-setup(bot)
+# setup(bot)
 
 if __name__ == "__main__":
     logger.info("Trying to start a bot")
@@ -39,3 +51,4 @@ if __name__ == "__main__":
         raise ValueError("Check the environment TOKEN variable, it is None")
 
     bot.run(TOKEN)
+

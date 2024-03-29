@@ -4,7 +4,7 @@ import datetime
 from disnake.ext import commands, tasks
 
 from cogs.giveaway_functions import GiveawayFunctions
-from database.database import Database
+from db.database import Database
 
 
 class GiveawayTasks(commands.Cog):
@@ -49,3 +49,4 @@ class GiveawayTasks(commands.Cog):
         for entry in entries:
             if entry[3] < datetime.datetime.now() - datetime.timedelta(days=14):
                 await self.db.delete_giveaway_entries(entry[1])
+
