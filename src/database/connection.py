@@ -2,8 +2,9 @@ import aiomysql
 from loguru import logger as log
 
 from tools.converters import Url
-from configs.config import Config
 from schemas.database.database_models import ConvertedUrl
+
+import configs.config as Config
 
 
 class DatabasePool:
@@ -111,4 +112,4 @@ class DatabasePool:
             log.error(f"Ошибка выполнения запроса {query}: {e}")
             return None
 
-db_pool = DatabasePool(Url.convert(str(Config.get_bot().database_url)))
+db_pool = DatabasePool(Url.convert(str(Config.DATABASE_URL)))

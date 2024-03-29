@@ -5,6 +5,7 @@ class Url:
     @classmethod
     def convert(cls, url: str):
         splitted_url = url.split("/")
+        print(splitted_url)
         return ConvertedUrl(hostname=splitted_url[2].split(":")[0],
                             port=int(splitted_url[2].split(":")[1]),
                             user=splitted_url[3].split(":")[0],

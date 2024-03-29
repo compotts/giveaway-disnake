@@ -4,11 +4,7 @@ from loguru import logger
 from disnake.ext import commands
 
 from cogs import setup
-from configs.config import Config
-
-from dotenv import load_dotenv
-
-load_dotenv()
+import configs.config as Config
 
 
 class Bot(commands.Bot):
@@ -16,7 +12,7 @@ class Bot(commands.Bot):
         super().__init__(
             command_prefix="!",
             intents=disnake.Intents.all(),
-            test_guilds=[Config.get_bot().test_guild],
+            test_guilds=[int(Config.TEST_GUILD)],
             help_command=None,
             reload=True,
             **kwargs,
@@ -40,7 +36,7 @@ setup(bot)
 if __name__ == "__main__":
     logger.info("Trying to start a bot")
 
-    if Config.token == "":
+    if Config.TOKEN == "":
         raise ValueError("Check the environment TOKEN variable, it is None")
 
     bot.run(Config.token)
