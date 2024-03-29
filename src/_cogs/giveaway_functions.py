@@ -5,7 +5,7 @@ import random
 import disnake
 from disnake.ext import commands
 
-from database.database import Database
+from db.database import Database
 
 
 class GiveawayFunctions(commands.Cog):
@@ -34,16 +34,34 @@ class GiveawayFunctions(commands.Cog):
         ended_time_full = disnake.utils.format_dt(datetime.datetime.now(), "F")
         winners = await self.choose_winners(giveaway[0][1])
         if winners:
-            winners_mentions = ", ".join([f"<@{winner[2]}>" for winner in winners])
-            await message.reply(f"Congratulations {winners_mentions}! You have won {giveaway[0][5]}!")
-            embed.description = f"- Winners: {winners_mentions}\n- Ended: {ended_time} ({ended_time_full})"
+            winners_mentions = ", ".join(
+                [f"<@{winner[2]}>" for winner in winners])
+            await message.reply(
+                f"Congratulations {winners_mentions}! You have won {
+                    giveaway[0][5]}!"
+            )
+            embed.description = f"- Winners: {winners_mentions}\n- Ended: {
+                ended_time} ({ended_time_full})"
         else:
             await message.reply("No one entered the giveaway.")
-            embed.description = f"- No winners\n- Ended: {ended_time} ({ended_time_full})"
-        await message.edit(embed=embed, components=[
-            disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Entries", custom_id="giveaway_entries"),
-            disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Reroll", custom_id="giveaway_reroll")
-        ])
+            embed.description = (
+                f"- No winners\n- Ended: {ended_time} ({ended_time_full})"
+            )
+        await message.edit(
+            embed=embed,
+            components=[
+                disnake.ui.Button(
+                    style=disnake.ButtonStyle.gray,
+                    label="Entries",
+                    custom_id="giveaway_entries",
+                ),
+                disnake.ui.Button(
+                    style=disnake.ButtonStyle.gray,
+                    label="Reroll",
+                    custom_id="giveaway_reroll",
+                ),
+            ],
+        )
         await self.db.set_true_ended(giveaway[0][1])
 
     async def start_giveaway(self, guild, giveaway_id, end_time):
@@ -53,7 +71,9 @@ class GiveawayFunctions(commands.Cog):
             await asyncio.sleep(round(sleep_seconds))
             await self.end_giveaway(giveaway_id, guild)
 
-    async def check_if_user_in_voice_channel(self, interaction: disnake.MessageInteraction):
+    async def check_if_user_in_voice_channel(
+        self, interaction: disnake.MessageInteraction
+    ):
         member = interaction.guild.get_member(interaction.author.id)
         if member and member.voice:
             if not isinstance(member.voice.channel, disnake.StageChannel):
@@ -66,3 +86,4 @@ class GiveawayFunctions(commands.Cog):
             if isinstance(member.voice.channel, disnake.StageChannel):
                 return True
         return False
+

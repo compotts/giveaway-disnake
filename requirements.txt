@@ -1,6 +1,7 @@
-ujson==5.9.0
 loguru==0.7.2
 disnake==2.9.1
 aiomysql==0.2.0
 typing==3.7.4.3
 python-dotenv==1.0.1
+ormar==0.20.0
+sqlalchemy==1.4.52
