@@ -1,8 +1,11 @@
 import disnake
+import asyncio
 from disnake.ext import commands
 from loguru import logger
 
 from config import TOKEN, TEST_GUILD
+
+from _cogs import setup
 
 import db
 
@@ -20,6 +23,7 @@ class Bot(commands.Bot):
 
     async def on_ready(self):
         await db.database.connect()
+        await db.db_setup(db.metadata)
 
         logger.info("Database connected properly")
 
@@ -36,7 +40,11 @@ class Bot(commands.Bot):
 
 bot = Bot()
 
-db.db_setup(db.metadata)
+setup(bot)
+
+
+# async def main():
+#     await db.db_setup(db.metadata)
 
 if __name__ == "__main__":
     logger.info("Trying to start a bot")
@@ -44,5 +52,5 @@ if __name__ == "__main__":
     if TOKEN == "":
         raise ValueError("Check the environment TOKEN variable, it is None")
 
+    # asyncio.run(main())
     bot.run(TOKEN)
-

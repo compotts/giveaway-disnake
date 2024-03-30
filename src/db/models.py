@@ -42,7 +42,7 @@ class Giveaway(ormar.Model):
     end_time: int = ormar.DateTime()
     winners: int = ormar.Integer()
     voice: str = ormar.String(max_length=64)
-    ended: bool = ormar.Boolean()
+    ended: StatusEnum = ormar.Enum(enum_class=StatusEnum)
 
 
 class GiveawayEntry(ormar.Model):
@@ -54,3 +54,12 @@ class GiveawayEntry(ormar.Model):
     giveaway_id: int = ormar.Integer()
     user_id: int = ormar.Integer()
     entry_time: int = ormar.DateTime()
+
+
+class Example(ormar.Model):
+    ormar_config = base_ormar_config.copy(
+        tablename="example",
+    )
+
+    id: int = ormar.Integer(primary_key=True, autoincrement=True)
+    name: str = ormar.Text(max_length=64)

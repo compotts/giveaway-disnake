@@ -1,16 +1,16 @@
-from cogs.listeners.giveaway_listeners import GiveawayListeners
-from cogs.giveaway_tasks import GiveawayTasks
-from cogs.giveaway_create import Giveaway
-from db import TablesCreate
-from db import PoolCreate
+from _cogs.test import Giveaway
+from _cogs.testTwo import GiveawayTwo
 
 from loguru import logger
 
-cogs = (Giveaway, PoolCreate, TablesCreate, GiveawayTasks, GiveawayListeners)
+cogs = (
+    Giveaway, 
+    GiveawayTwo
+)
 
 
 def setup(bot):
     for cog in cogs:
         bot.add_cog(cog(bot))
-        logger.info(f"Cog {cog.name} loaded")
+        logger.info(f"Cog {cog.__name__} loaded")
 
