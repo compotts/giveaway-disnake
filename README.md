@@ -18,11 +18,6 @@
 DATABASE_URL='mysql://lukas:krasava@localhost/giveaway'
 ```
 
-- `lukas` - имя пользователя для подключения к базе данных
-- `krasava` - пароль для подключения к базе данных
-- `localhost` - адрес сервера базы данных
-- `giveaway` - имя базы данных
-
 Пример PostgreSQL:
 
 ```python
