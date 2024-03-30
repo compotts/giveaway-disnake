@@ -3,7 +3,7 @@ from sqlalchemy.engine import Engine
 
 from config import DATABASE_URL
 
-from .base_metadata import metadata, database
+from .base import metadata, database, base_ormar_config
 
 
 def db_setup(
@@ -22,6 +22,7 @@ def db_setup(
 
 __all__ = (
     "db_setup",
+    "base_ormar_config",
     "database",
     "metadata",
 )

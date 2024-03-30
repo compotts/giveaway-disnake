@@ -2,12 +2,10 @@ import disnake
 from disnake.ext import commands
 from loguru import logger
 
-# from cogs import setup
 from config import TOKEN, TEST_GUILD
-from db import metadata, db_setup, database
 
 
-db_setup(metadata)
+from db import db_setup, metadata, database
 
 
 class Bot(commands.Bot):
@@ -22,27 +20,25 @@ class Bot(commands.Bot):
         )
 
     async def on_ready(self):
-        if not database.is_connected:
-            await database.connect()
+        await database.connect()
+
+        db_setup(metadata)
 
         logger.info("Database connected properly")
 
-        logger.success(
-            f"-> < DISCORD API  CONNECTED > {self.user.name} запущен")
+        logger.success(f"-> < DISCORD API  CONNECTED > {self.user.name} запущен")
 
     async def on_resumed(self):
         logger.warning(f"-> < DISCORD API RESUMED > {self.user}")
 
     async def on_disconnect(self):
-        if database.is_connected:
-            await database.disconnect()
+        await database.disconnect()
 
         logger.critical(f"-> < DISCORD API DISCONNECTED > {self.user}")
 
 
 bot = Bot()
 
-# setup(bot)
 
 if __name__ == "__main__":
     logger.info("Trying to start a bot")
