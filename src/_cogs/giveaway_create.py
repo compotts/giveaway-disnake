@@ -29,7 +29,6 @@ class Giveaway(commands.Cog):
         ),
     ):
         try:
-            winers = int(winners)
         except ValueError:
             embed = disnake.Embed(title="Create giveaway", color=0x2F3136)
             embed.description = f"{interaction.author.mention}, Ошибка при конвертировании `{
