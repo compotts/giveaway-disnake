@@ -4,8 +4,7 @@ from loguru import logger
 
 from config import TOKEN, TEST_GUILD
 
-
-from db import db_setup, metadata, database
+import db
 
 
 class Bot(commands.Bot):
@@ -20,9 +19,7 @@ class Bot(commands.Bot):
         )
 
     async def on_ready(self):
-        await database.connect()
-
-        db_setup(metadata)
+        await db.database.connect()
 
         logger.info("Database connected properly")
 
@@ -32,13 +29,14 @@ class Bot(commands.Bot):
         logger.warning(f"-> < DISCORD API RESUMED > {self.user}")
 
     async def on_disconnect(self):
-        await database.disconnect()
+        await db.database.disconnect()
 
         logger.critical(f"-> < DISCORD API DISCONNECTED > {self.user}")
 
 
 bot = Bot()
 
+db.db_setup(db.metadata)
 
 if __name__ == "__main__":
     logger.info("Trying to start a bot")

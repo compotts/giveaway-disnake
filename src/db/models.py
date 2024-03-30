@@ -1,12 +1,10 @@
 import ormar
 
-from db import metadata, database
+from db import base_ormar_config
 
 
 class Giveaway(ormar.Model):
-    ormar_config = ormar.OrmarConfig(
-        metadata=metadata,
-        database=database,
+    ormar_config = base_ormar_config.copy(
         tablename="giveaways",
     )
 
