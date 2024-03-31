@@ -1,3 +1,4 @@
+import ormar
 from db import Giveaway
 
 
@@ -7,8 +8,11 @@ class GiveawayRepository:
            return res
     
     async def get(self, id):
-        res = await Giveaway.objects.get(message_id=id)
-        return res
+        try:
+            res = await Giveaway.objects.get(message_id=id)
+            return res
+        except ormar.exceptions.NoMatch:
+            return None
 
     async def update(self, id, data):
         res = await Giveaway.objects.update(id=id, **data)
@@ -19,5 +23,5 @@ class GiveawayRepository:
         return res
 
     async def delete(self, id):
-        res = await Giveaway.objects.delete(id=id)
+        res = await Giveaway.objects.delete(message_id=id)
         return res

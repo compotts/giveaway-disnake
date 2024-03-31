@@ -1,11 +1,10 @@
 import disnake
-import asyncio
 from disnake.ext import commands
 from loguru import logger
 
 from config import TOKEN, TEST_GUILD
 
-from _cogs import setup
+from cogs import setup
 
 import db
 

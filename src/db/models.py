@@ -1,7 +1,6 @@
 import ormar
 import datetime
 
-from sqlalchemy import text
 from enum import Enum
 
 from db import base_ormar_config
@@ -30,7 +29,7 @@ class Giveaway(ormar.Model):
     hoster_id: int = ormar.BigInteger()
     prize: str = ormar.String(minimum=1, max_length=64)
     winers: int = ormar.Integer()
-    start_time: int = ormar.DateTime(default=datetime.datetime.now())
+    start_time: int = ormar.DateTime()
     end_time: int = ormar.DateTime()
     voice_needed: VoiceEnum = ormar.Enum(enum_class=VoiceEnum)
     status: StatusEnum = ormar.Enum(enum_class=StatusEnum)

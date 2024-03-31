@@ -14,7 +14,4 @@ async def db_setup(
     if not engine:
         raise RuntimeError("Database engine was not created properly")
 
-    # metadata.drop_all(engine)
-    # metadata.create_all(engine)
-
     return engine

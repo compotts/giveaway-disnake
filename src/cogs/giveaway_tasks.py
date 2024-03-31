@@ -1,7 +1,7 @@
 from disnake.ext import commands, tasks
 
 
-class GiveawayTasks(commands.Cog):
+class GiveawayTask(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
