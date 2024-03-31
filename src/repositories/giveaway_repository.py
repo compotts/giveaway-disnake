@@ -11,7 +11,14 @@ class GiveawayRepository:
         try:
             res = await Giveaway.objects.get(message_id=id)
             return res
-        except ormar.exceptions.NoMatch:
+        except ormar.NoMatch:
+            return None
+        
+    async def get_all(self):
+        try:
+            res = await Giveaway.objects.all()
+            return res
+        except ormar.NoMatch:
             return None
 
     async def update(self, id, data):

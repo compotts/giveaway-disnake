@@ -11,6 +11,7 @@ from repositories import GiveawayRepository, ParticipantRepository
 class GiveawayFunction(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.giveaway_loop = None
         self.giveaway_db = GiveawayRepository()
         self.participants_db = ParticipantRepository()
 
@@ -53,7 +54,7 @@ class GiveawayFunction(commands.Cog):
         )
         if winners:
             winners_mentions = ", ".join(
-                [f"<@{winner[2]}>" for winner in winners]
+                [f"<@{winner.user_id}>" for winner in winners]
             )
             await message.reply(
                 f"Поздравляем {winners_mentions}! Вы выиграли {giveaway.prize}!"

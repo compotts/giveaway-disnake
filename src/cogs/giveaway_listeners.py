@@ -15,10 +15,6 @@ class GiveawayListener(commands.Cog):
         self.participants_db = ParticipantRepository()
 
     @commands.Cog.listener()
-    async def on_connect(self):
-        ...
-
-    @commands.Cog.listener()
     async def on_voice_state_update(self, member: disnake.Member, before: disnake.VoiceState, after: disnake.VoiceState):
         if (before.channel is not None and not after.channel is not None) or (isinstance(before.channel, disnake.StageChannel) and not isinstance(after.channel, disnake.StageChannel)):
             entries = await self.participants_db.get_by_user_id(member.id)
@@ -142,4 +138,4 @@ class GiveawayListener(commands.Cog):
         if not giveaway:
             return
         await self.giveaway_db.delete(payload.message_id)
-        await self.participants_db.delete_by_id(payload.message_id)
+        await self.participants_db.delete(payload.message_id)

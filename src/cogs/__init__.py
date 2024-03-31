@@ -1,9 +1,10 @@
 from cogs.giveaway_create import Giveaway
 from cogs.giveaway_listeners import GiveawayListener
+from cogs.giveaway_tasks import GiveawayTask
 
 from loguru import logger
 
-cogs = (Giveaway, GiveawayListener)
+cogs = (Giveaway, GiveawayListener, GiveawayTask)
 
 
 def setup(bot):
