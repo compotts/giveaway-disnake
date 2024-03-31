@@ -23,17 +23,15 @@ class Bot(commands.Bot):
     async def on_ready(self):
         await db.database.connect()
         await db.db_setup(db.metadata)
-
         logger.info("Database connected properly")
-
         logger.success(f"-> < DISCORD API  CONNECTED > {self.user.name} запущен")
 
     async def on_resumed(self):
+        await db.database.connect()
         logger.warning(f"-> < DISCORD API RESUMED > {self.user}")
 
     async def on_disconnect(self):
         await db.database.disconnect()
-
         logger.critical(f"-> < DISCORD API DISCONNECTED > {self.user}")
 
 
@@ -41,15 +39,11 @@ bot = Bot()
 
 setup(bot)
 
-
-# async def main():
-#     await db.db_setup(db.metadata)
-
 if __name__ == "__main__":
     logger.info("Trying to start a bot")
 
     if TOKEN == "":
         raise ValueError("Check the environment TOKEN variable, it is None")
 
-    # asyncio.run(main())
+    # bot.i18n.load("./localization")
     bot.run(TOKEN)
