@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Система для создания и проведения розыгрышей на сервере Discord
 
 Данный дискорд бот написан на [Python](https://www.python.org/) с использованием [Disnake](https://disnake.readthedocs.io/en/latest/) и [Ormar](https://collerek.github.io/ormar/latest/).
@@ -18,3 +19,6 @@
 ## Обнаружили проблему?
 
 Если вы обнаружили проблему, пожалуйста, создайте новый Issue, чтобы мы могли исправить ее.
+=======
+there are problems..
+>>>>>>> 7d2d81a17843f9e8039c1fa1493ee33986691f03
