@@ -1,41 +1,19 @@
-# Giveaway Disnake Bot
+# Система для создания и проведения розыгрышей на сервере Discord
 
-Многофункциональный бот для проведения розыгрышей на вашем сервере.
-
-## Установка и настройка
-
-1. Установите необходимые библиотеки, указанные в файле `requirements.txt`.
-2. Создайте `.env` файл и заполните его содержимым используя шаблон `.env.sample`.
-3. Установите `TEST_GUILDS` в созданном ранее файле `.env`.
-4. Установите `TOKEN` в созданном ранее файле `.env`.
-5. Впишите `DATABASE_URL` для базы данных, которую вы хотите использовать.
-
-## Подробнее о DATABASE_URL
-
-Пример MySQL:
-
-```python
-DATABASE_URL='mysql://lukas:krasava@localhost/giveaway'
-```
-
-Пример PostgreSQL:
-
-```python
-DATABASE_URL='postgresql://lukas:krasava@localhost/giveaway'
-```
-
-- `lukas` - имя пользователя для подключения к базе данных
-- `krasava` - пароль для подключения к базе данных
-- `localhost` - адрес сервера базы данных
-- `giveaway` - имя базы данных
-
-Пример SQLite:
-
-```python
-DATABASE_URL='sqlite:///giveaway.db'
-```
-
-- `giveaway.db` - имя файла базы данных, при первом использовании создается автоматически
+Данный дискорд бот написан на [Python](https://www.python.org/) с использованием [Disnake](https://disnake.readthedocs.io/en/latest/) и [Ormar](https://collerek.github.io/ormar/latest/).
+# Использование
+![visual](./assets/)
+# Запуск
+- Пукнт **1**: Подготовка
+- - Создать `.env` файл и заполнить его содержимым используя шаблон `.env.sample`
+- - Обратите внимание на `DATABASE_URL` - это URL для подключения к базе данных, пример:
+  - **sqlite** - `DATABASE_URL='sqlite+aiosqlite:///giveaway.db'`
+  - **MySQL** - `DATABASE_URL='mysql+aiomysql://lukas:krasava@localhost/giveaway'`
+  - **PostgreSQL** - `DATABASE_URL='postgresql+asyncpg://lukas:krasava@localhost/giveaway'`
+- Пукнт **2**: Проверка
+- - Запустить `main.py`
+- - Проверьте, что бот запущен и работает исправно
+- - При ошибках проверьте все ли вы записали в конфиге
 
 ## Обнаружили проблему?
 

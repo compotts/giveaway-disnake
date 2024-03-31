@@ -18,7 +18,6 @@ class GiveawayRepository:
         res = await Giveaway.objects.filter(message_id=id).update(**{column: new_value})
         return res
 
-    
     async def delete(self, id):
         res = await Giveaway.objects.delete(id=id)
         return res
