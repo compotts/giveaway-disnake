@@ -1,4 +1,4 @@
-from _cogs.test import Giveaway
+from _cogs.giveaway_create import Giveaway
 from _cogs.testTwo import GiveawayTwo
 
 from loguru import logger

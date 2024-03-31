@@ -1,7 +1,7 @@
 from .base import metadata, database, base_ormar_config
 from .db_setup import db_setup
-from .models import Giveaway, GiveawayEntry, Example
+from .models import Giveaway, Participant
 
 
-__all__ = ("Giveaway", "GiveawayEntry", "Example", "db_setup", "base_ormar_config", "database", "metadata")
+__all__ = ("Giveaway", "Participant", "db_setup", "base_ormar_config", "database", "metadata")
 
