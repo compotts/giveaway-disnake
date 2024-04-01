@@ -34,9 +34,15 @@ class GiveawayFunction(commands.Cog):
         return False
 
     async def choose_winners(self, giveaway_id):
-        entries = await self.participants_db.get_by_id(giveaway_id)
-        giveaway = await self.giveaway_db.get(giveaway_id)
-        winners_count = int(giveaway.winers)
+        entries = await self.participants_db.get(
+            id=giveaway_id
+        )
+        giveaway = await self.giveaway_db.get(
+            id=giveaway_id
+        )
+        winners_count = int(
+            giveaway.winers
+        )
         winners = random.sample(
             entries, 
             min(winners_count, len(entries))
@@ -44,7 +50,9 @@ class GiveawayFunction(commands.Cog):
         return winners
 
     async def end_giveaway(self, giveaway_id, guild):
-        giveaway = await self.giveaway_db.get(giveaway_id)
+        giveaway = await self.giveaway_db.get(
+            id=giveaway_id
+        )
         if not giveaway:
             return
         guild = self.bot.get_guild(
@@ -102,8 +110,7 @@ class GiveawayFunction(commands.Cog):
                 ),
             ],
         )
-        await self.giveaway_db.update_custom(
-            giveaway.message_id, 
-            "status", 
-            "ended"
+        await self.giveaway_db.update(
+            id=giveaway.message_id, 
+            data={"status": "ended"}
         )

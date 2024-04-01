@@ -17,22 +17,34 @@ class GiveawayListener(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: disnake.Member, before: disnake.VoiceState, after: disnake.VoiceState):
         if (before.channel is not None and not after.channel is not None) or (isinstance(before.channel, disnake.StageChannel) and not isinstance(after.channel, disnake.StageChannel)):
-            entries = await self.participants_db.get_by_user_id(member.id)
+            entries = await self.participants_db.get(
+                user_id=member.id
+            )
             if not entries:
                 return
             for entry in entries:
-                giveaway = await self.giveaway_db.get(entry.giveaway_id)
+                giveaway = await self.giveaway_db.get(
+                    id=entry.giveaway_id
+                )
                 if not giveaway:
                     return
                 if giveaway.voice_needed == "Voice" and before.channel is not None and not after.channel is not None:
-                    await self.participants_db.delete_by_ids(entry.giveaway_id, member.id)
+                    await self.participants_db.delete(
+                        id=entry.giveaway_id, 
+                        user_id=member.id
+                    )
                 elif giveaway.voice_needed == "Tribune" and isinstance(before.channel, disnake.StageChannel) and not isinstance(after.channel, disnake.StageChannel):
-                    await self.participants_db.delete_by_ids(entry.giveaway_id, member.id)
+                    await self.participants_db.delete(
+                        id=entry.giveaway_id, 
+                        user_id=member.id
+                    )
 
     @commands.Cog.listener()
     async def on_button_click(self, interaction: disnake.MessageInteraction):
         if interaction.component.custom_id == "giveaway_join":
-            giveaway = await self.giveaway_db.get(interaction.message.id)
+            giveaway = await self.giveaway_db.get(
+                id=interaction.message.id
+            )
             if not giveaway or giveaway.end_time < datetime.datetime.now():
                 embed = disnake.Embed(
                     description="Розыгрыш уже окончен!", 
@@ -65,9 +77,9 @@ class GiveawayListener(commands.Cog):
                         ephemeral=True
                     )
                     return
-            entry = await self.participants_db.get_by_id_and_user_id(
-                interaction.message.id, 
-                interaction.author.id
+            entry = await self.participants_db.get(
+                id=interaction.message.id, 
+                user_id=interaction.author.id
             )
             if entry:
                 embed = disnake.Embed(
@@ -79,7 +91,7 @@ class GiveawayListener(commands.Cog):
                     ephemeral=True
                 )
                 await self.participants_db.delete(
-                    interaction.message.id
+                    id=interaction.message.id
                 )
             else:
                 embed = disnake.Embed(
@@ -97,7 +109,9 @@ class GiveawayListener(commands.Cog):
                 })
 
         elif interaction.component.custom_id == "giveaway_entries":
-            entries = await self.participants_db.get(interaction.message.id)
+            entries = await self.participants_db.get(
+                id=interaction.message.id
+            )
             if not entries:
                 embed = disnake.Embed(
                     description="В розыгрыше нету участников!",
@@ -141,7 +155,7 @@ class GiveawayListener(commands.Cog):
                 return 
             winners = await GiveawayFunction(self.bot).choose_winners(interaction.message.id)
             giveaway = await self.giveaway_db.get(
-                interaction.message.id
+                id=interaction.message.id
             )
             ended_time = disnake.utils.format_dt(
                 datetime.datetime.now(), 
@@ -195,8 +209,8 @@ class GiveawayListener(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload: disnake.RawMessageDeleteEvent):
-        giveaway = await self.giveaway_db.get(payload.message_id)
+        giveaway = await self.giveaway_db.get(id=payload.message_id)
         if not giveaway:
             return
-        await self.giveaway_db.delete(payload.message_id)
-        await self.participants_db.delete(payload.message_id)
+        await self.giveaway_db.delete(id=payload.message_id)
+        await self.participants_db.delete(id=payload.message_id)

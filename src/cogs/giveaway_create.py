@@ -112,18 +112,20 @@ class Giveaway(commands.Cog):
             embed=embed, 
             components=components
         )
-        await self.giveaway_db.create(data = {
-            "message_id": message.id,
-            "channel_id": interaction.channel.id,
-            "guild_id": interaction.guild.id,
-            "hoster_id": interaction.author.id,
-            "prize": prize,
-            "winers": winners,
-            "start_time": start_time,
-            "end_time": end_time,
-            "voice_needed": voice,
-            "status": "active",
-        })
+        await self.giveaway_db.create(
+            data = {
+                "message_id": message.id,
+                "channel_id": interaction.channel.id,
+                "guild_id": interaction.guild.id,
+                "hoster_id": interaction.author.id,
+                "prize": prize,
+                "winers": winners,
+                "start_time": start_time,
+                "end_time": end_time,
+                "voice_needed": voice,
+                "status": "active",
+            }
+        )
         await interaction.response.send_message(
             embed=disnake.Embed(
                 description="Вы успешно создали розыгрыш!",
