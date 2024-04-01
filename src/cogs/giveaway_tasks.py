@@ -37,7 +37,6 @@ class GiveawayTask(commands.Cog):
                 await self.participants_db.delete(
                     participant.giveaway_id
                 )
-                print(f"Delete participant {participant.giveaway_id}")
 
     @tasks.loop(seconds=10)
     async def update_giveaways(self):
@@ -53,7 +52,6 @@ class GiveawayTask(commands.Cog):
                     giveaway.message_id, 
                     guild
                 )
-                print(f"End giveaway {giveaway.message_id}")
 
     @tasks.loop(seconds=5)
     async def update_footer(self):
@@ -86,6 +84,6 @@ class GiveawayTask(commands.Cog):
                     await self.giveaway_db.delete(
                         giveaway.message_id
                     )
-                    await self.participants_db.delete_by_id(
+                    await self.participants_db.delete(
                         giveaway.message_id
                     )

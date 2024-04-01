@@ -25,9 +25,9 @@ class GiveawayListener(commands.Cog):
                 if not giveaway:
                     return
                 if giveaway.voice_needed == "Voice" and before.channel is not None and not after.channel is not None:
-                    await self.participants_db.delete_by_id_and_user_id(entry.giveaway_id, member.id)
+                    await self.participants_db.delete_by_ids(entry.giveaway_id, member.id)
                 elif giveaway.voice_needed == "Tribune" and isinstance(before.channel, disnake.StageChannel) and not isinstance(after.channel, disnake.StageChannel):
-                    await self.participants_db.delete_by_id_and_user_id(entry.giveaway_id, member.id)
+                    await self.participants_db.delete_by_ids(entry.giveaway_id, member.id)
 
     @commands.Cog.listener()
     async def on_button_click(self, interaction: disnake.MessageInteraction):
@@ -79,8 +79,7 @@ class GiveawayListener(commands.Cog):
                     ephemeral=True
                 )
                 await self.participants_db.delete(
-                    interaction.message.id, 
-                    interaction.author.id
+                    interaction.message.id
                 )
             else:
                 embed = disnake.Embed(
@@ -130,7 +129,69 @@ class GiveawayListener(commands.Cog):
             )
                 
         elif interaction.component.custom_id == "giveaway_reroll":
-            ...
+            if not interaction.author.guild_permissions.administrator:
+                embed = disnake.Embed(
+                    description="Вы не можете выполнить это действие!", 
+                    color=0x2F3136
+                )
+                await interaction.response.send_message(
+                    embed=embed, 
+                    ephemeral=True
+                )
+                return 
+            winners = await GiveawayFunction(self.bot).choose_winners(interaction.message.id)
+            giveaway = await self.giveaway_db.get(
+                interaction.message.id
+            )
+            ended_time = disnake.utils.format_dt(
+                datetime.datetime.now(), 
+                "R"
+            )
+            ended_time_full = disnake.utils.format_dt(
+                datetime.datetime.now(), 
+                "F"
+            )
+            embed_message = interaction.message.embeds[0]
+            if winners:
+                winners_mentions = ", ".join(
+                    [f"<@{winner.user_id}>" for winner in winners]
+                )
+                await interaction.message.reply(
+                    f"Поздравляем {winners_mentions}! Вы выиграли {giveaway.prize}!"
+                )
+                embed_message.description = (
+                    f"- Новый победитель: {winners_mentions}\n- Завершено: {ended_time} ({ended_time_full})"
+                )
+            else:
+                await interaction.message.reply(
+                    "Никто не присоединился к розыгрышу."
+                )
+                embed_message.description = (
+                    f"- Нету победителей\n- Завершено: {ended_time} ({ended_time_full})"
+                )
+            embed_rerolled = disnake.Embed(
+                description="Победитель был перевыбран!",
+                color=0x2F3136
+            )
+            await interaction.response.send_message(
+                embed=embed_rerolled, 
+                ephemeral=True
+            )
+            await interaction.message.edit(
+                embed=embed_message,
+                components=[
+                    disnake.ui.Button(
+                        style=disnake.ButtonStyle.gray,
+                        label="Участники",
+                        custom_id="giveaway_entries",
+                    ),
+                    disnake.ui.Button(
+                        style=disnake.ButtonStyle.gray,
+                        label="Перевыбрать",
+                        custom_id="giveaway_reroll",
+                    ),
+                ],
+            )
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload: disnake.RawMessageDeleteEvent):

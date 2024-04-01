@@ -124,13 +124,6 @@ class Giveaway(commands.Cog):
             "voice_needed": voice,
             "status": "active",
         })
-        self.bot.loop.create_task(
-            GiveawayFunction(self.bot).start_giveaway(
-                interaction.guild.id, 
-                message.id, 
-                end_time
-            )
-        )
         await interaction.response.send_message(
             embed=disnake.Embed(
                 description="Вы успешно создали розыгрыш!",

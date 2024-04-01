@@ -15,6 +15,24 @@ class GiveawayFunction(commands.Cog):
         self.giveaway_db = GiveawayRepository()
         self.participants_db = ParticipantRepository()
 
+    async def check_if_user_in_voice_channel(self, interaction: disnake.MessageInteraction):
+        member = interaction.guild.get_member(
+            interaction.author.id
+        )
+        if member and member.voice:
+            if not isinstance(member.voice.channel, disnake.StageChannel):
+                return True
+        return False
+
+    async def check_if_user_on_tribune(self, interaction: disnake.MessageInteraction):
+        member = interaction.guild.get_member(
+            interaction.author.id
+        )
+        if member and member.voice:
+            if isinstance(member.voice.channel, disnake.StageChannel):
+                return True
+        return False
+
     async def choose_winners(self, giveaway_id):
         entries = await self.participants_db.get_by_id(giveaway_id)
         giveaway = await self.giveaway_db.get(giveaway_id)
@@ -89,30 +107,3 @@ class GiveawayFunction(commands.Cog):
             "status", 
             "ended"
         )
-
-    async def start_giveaway(self, guild, giveaway_id, end_time):
-        sleep_seconds = (end_time - datetime.datetime.now()).total_seconds()
-        if sleep_seconds > 0:
-            await asyncio.sleep(round(sleep_seconds))
-            await self.end_giveaway(
-                giveaway_id, 
-                guild
-            )
-
-    async def check_if_user_in_voice_channel(self, interaction: disnake.MessageInteraction):
-        member = interaction.guild.get_member(
-            interaction.author.id
-        )
-        if member and member.voice:
-            if not isinstance(member.voice.channel, disnake.StageChannel):
-                return True
-        return False
-
-    async def check_if_user_on_tribune(self, interaction: disnake.MessageInteraction):
-        member = interaction.guild.get_member(
-            interaction.author.id
-        )
-        if member and member.voice:
-            if isinstance(member.voice.channel, disnake.StageChannel):
-                return True
-        return False

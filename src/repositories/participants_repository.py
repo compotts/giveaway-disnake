@@ -50,6 +50,6 @@ class ParticipantRepository:
         res = await Participant.objects.filter(giveaway_id=id).delete()
         return res
     
-    async def delete_by_id(self, id, user_id):
+    async def delete_by_ids(self, id, user_id):
         res = await Participant.objects.filter(giveaway_id=id, user_id=user_id).delete()
         return res
