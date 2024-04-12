@@ -1,7 +1,7 @@
 # Система для создания и проведения розыгрышей на сервере Discord
 Данный дискорд бот написан на [Python](https://www.python.org/) с использованием [Disnake](https://disnake.readthedocs.io/en/latest/) и [Ormar](https://collerek.github.io/ormar/latest/).
 # Использование
-![visual](./assets/example_to_use.gif)
+![visual](./example_to_use.gif)
 # Запуск
 - Пукнт **1**: Подготовка
 - - Создать `.env` файл и заполнить его содержимым используя шаблон `.env.sample`
