@@ -15,7 +15,6 @@ class ParticipantRepository:
         try:
             if id is not None and user_id is not None:
                 to_return = await db.Participant.objects.get(giveaway_id=id, user_id=user_id)
-                print(to_return)
                 if not to_return:
                     return None
                 return to_return
