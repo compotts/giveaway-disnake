@@ -91,7 +91,8 @@ class GiveawayListener(commands.Cog):
                     ephemeral=True
                 )
                 await self.participants_db.delete(
-                    id=interaction.message.id
+                    id=interaction.message.id,
+                    user_id=interaction.author.id
                 )
             else:
                 embed = disnake.Embed(
