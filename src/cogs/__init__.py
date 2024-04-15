@@ -1,9 +1,11 @@
 from cogs.giveaway_create import Giveaway
+from cogs.giveaway_functions import GiveawayFunction
 from cogs.giveaway_listeners import GiveawayListener
 from cogs.giveaway_tasks import GiveawayTask
 
 from loguru import logger
 
+__all__ = (Giveaway, GiveawayListener, GiveawayTask, GiveawayFunction)
 cogs = (Giveaway, GiveawayListener, GiveawayTask)
 
 

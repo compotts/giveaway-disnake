@@ -3,7 +3,7 @@ import datetime
 
 from disnake.ext import commands
 
-from .giveaway_functions import GiveawayFunction
+from . import views
 from repositories import GiveawayRepository
 
 
@@ -96,21 +96,9 @@ class Giveaway(commands.Cog):
         embed.set_footer(
             text=f"Участники - 0"
         )
-        components = [
-            disnake.ui.Button(
-                style=disnake.ButtonStyle.blurple,
-                label="Присоединиться",
-                custom_id="giveaway_join",
-            ),
-            disnake.ui.Button(
-                style=disnake.ButtonStyle.gray,
-                label="Участники",
-                custom_id="giveaway_entries",
-            ),
-        ]
         message = await interaction.channel.send(
             embed=embed, 
-            components=components
+            view=views.GiveawayCreateView(self.bot)
         )
         await self.giveaway_db.create(
             data = {
@@ -120,8 +108,8 @@ class Giveaway(commands.Cog):
                 "hoster_id": interaction.author.id,
                 "prize": prize,
                 "winers": winners,
-                "start_time": start_time,
-                "end_time": end_time,
+                "start_time": start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "end_time": end_time.strftime("%Y-%m-%d %H:%M:%S"),
                 "voice_needed": voice,
                 "status": "active",
             }

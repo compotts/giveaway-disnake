@@ -1,12 +1,10 @@
+import db
 import disnake
 from disnake.ext import commands
-from loguru import logger
-
 from config import TOKEN, TEST_GUILD
-
+from loguru import logger
 from cogs import setup
 
-import db
 
 
 class Bot(commands.Bot):
@@ -19,11 +17,14 @@ class Bot(commands.Bot):
             reload=True,
             **kwargs,
         )
+        self.loop.run_until_complete(self.setup_db())
 
-    async def on_ready(self):
+    async def setup_db(self):
         await db.database.connect()
         await db.db_setup(db.metadata)
-        logger.info("Database connected properly")
+        logger.info("Database connected and setup properly")
+
+    async def on_ready(self):
         logger.success(f"-> < DISCORD API  CONNECTED > {self.user.name} запущен")
 
     async def on_resumed(self):
@@ -45,5 +46,4 @@ if __name__ == "__main__":
     if TOKEN == "":
         raise ValueError("Check the environment TOKEN variable, it is None")
 
-    # bot.i18n.load("./localization")
     bot.run(TOKEN)

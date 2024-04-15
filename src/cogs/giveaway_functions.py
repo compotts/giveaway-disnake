@@ -5,15 +5,16 @@ import random
 import disnake
 from disnake.ext import commands
 
-from repositories import GiveawayRepository, ParticipantRepository
+from . import views
+import repositories
 
 
 class GiveawayFunction(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.giveaway_loop = None
-        self.giveaway_db = GiveawayRepository()
-        self.participants_db = ParticipantRepository()
+        self.giveaway_db = repositories.GiveawayRepository()
+        self.participants_db = repositories.ParticipantRepository()
 
     async def check_if_user_in_voice_channel(self, interaction: disnake.MessageInteraction):
         member = interaction.guild.get_member(
@@ -35,10 +36,10 @@ class GiveawayFunction(commands.Cog):
 
     async def choose_winners(self, giveaway_id):
         entries = await self.participants_db.get(
-            id=giveaway_id
+            giveaway_id=giveaway_id
         )
         giveaway = await self.giveaway_db.get(
-            id=giveaway_id
+            giveaway_id=giveaway_id
         )
         winners_count = int(
             giveaway.winers
@@ -51,7 +52,7 @@ class GiveawayFunction(commands.Cog):
 
     async def end_giveaway(self, giveaway_id, guild):
         giveaway = await self.giveaway_db.get(
-            id=giveaway_id
+            giveaway_id=giveaway_id
         )
         if not giveaway:
             return
@@ -97,18 +98,7 @@ class GiveawayFunction(commands.Cog):
             )
         await message.edit(
             embed=embed,
-            components=[
-                disnake.ui.Button(
-                    style=disnake.ButtonStyle.gray,
-                    label="Участники",
-                    custom_id="giveaway_entries",
-                ),
-                disnake.ui.Button(
-                    style=disnake.ButtonStyle.gray,
-                    label="Перевыбрать",
-                    custom_id="giveaway_reroll",
-                ),
-            ],
+            view=views.GiveawayRerollView(self.bot)
         )
         await self.giveaway_db.update(
             id=giveaway.message_id, 

@@ -1,23 +1,20 @@
 import disnake
 import datetime
 import asyncio
+import repositories
+
 from disnake.ext import commands, tasks
-
-from loguru import logger as log
-
-from .giveaway_functions import GiveawayFunction
-from repositories import GiveawayRepository, ParticipantRepository
+from . import giveaway_functions
 
 
 class GiveawayTask(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.giveaway_db = GiveawayRepository()
-        self.participants_db = ParticipantRepository()
+        self.giveaway_db = repositories.GiveawayRepository()
+        self.participants_db = repositories.ParticipantRepository()
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await asyncio.sleep(3)
         if not self.update_footer.is_running():
             self.update_footer.start()
             
@@ -33,22 +30,22 @@ class GiveawayTask(commands.Cog):
         if not entries:
             return
         for participant in entries:
-            if participant.entry_time < datetime.datetime.now() - datetime.timedelta(days=14):
+            if datetime.datetime.strptime(participant.entry_time, "%Y-%m-%d %H:%M:%S") < datetime.datetime.now() - datetime.timedelta(days=14):
                 await self.participants_db.delete(
                     id=participant.giveaway_id
                 )
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=5)
     async def update_giveaways(self):
         giveaways = await self.giveaway_db.get()
         if not giveaways:
             return
         for giveaway in giveaways:
-            if giveaway.end_time < datetime.datetime.now() and giveaway.status == "active":
+            if datetime.datetime.strptime(giveaway.end_time, "%Y-%m-%d %H:%M:%S") < datetime.datetime.now() and giveaway.status == "active":
                 guild = self.bot.get_guild(
                     giveaway.guild_id
                 )
-                await GiveawayFunction(self.bot).end_giveaway(
+                await giveaway_functions.GiveawayFunction(self.bot).end_giveaway(
                     giveaway.message_id, 
                     guild
                 )
@@ -59,6 +56,8 @@ class GiveawayTask(commands.Cog):
         if not giveaways:
             return
         for giveaway in giveaways:
+            if giveaway.status == "ended":
+                continue
             try:
                 guild = self.bot.get_guild(
                     giveaway.guild_id
@@ -71,7 +70,7 @@ class GiveawayTask(commands.Cog):
                 )
                 embed = message.embeds[0]
                 finally_count = await self.participants_db.get(
-                    id=giveaway.message_id
+                    giveaway_id=giveaway.message_id
                 )
                 embed.set_footer(
                     text=f"Участники - {len(finally_count)}"
