@@ -5,7 +5,7 @@ from ormar.exceptions import ModelError
 
 
 class GiveawayRepository:
-    async def create(self, data: dict[str, any]):
+    async def create(self, data: dict[str, any]) -> Giveaway:
         try:
             res = await Giveaway.objects.create(**data)
             return res
