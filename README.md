@@ -1,5 +1,10 @@
 # Система для создания и проведения розыгрышей на сервере Discord
 Данный дискорд бот написан на [Python](https://www.python.org/) с использованием [Disnake](https://disnake.readthedocs.io/en/latest/) и [Ormar](https://collerek.github.io/ormar/latest/).
+
+> [!WARNING]
+> **В БОТЕ ВОЗМОЖНЫ БАГИ**
+> Бот не тестировалс, поэтому в нем возможны баги, если вы нашли его, вы можете создать Issue
+
 # Использование
 ![visual](./example_to_use.gif)
 # Запуск
